@@ -45,12 +45,12 @@ import (
 // User is a declaration of the model for the collection
 type User struct {
 	tigris.Model
-	Name    string
+	Name    string `tigris:"searchIndex"`
 	Balance float64
 }
 
 func main() {
-	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
 	// Connect to the Tigris backend, create the database and collection if they don't exist,
@@ -59,8 +59,9 @@ func main() {
 		URL:          "your_tigris_uri",
 		ClientID:     "your_client_id_here",
 		ClientSecret: "your_client_secret_here",
+		Project:      "quickstart",
 	}
-	db, err := tigris.OpenDatabase(ctx, cfg, "hello_db", &User{})
+	db, err := tigris.OpenDatabase(ctx, cfg, &User{})
 	if err != nil {
 		panic(err)
 	}
